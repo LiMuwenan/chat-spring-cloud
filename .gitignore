@@ -3,4 +3,4 @@
 *.iml
 /*/*.iml
 # output
-/target
+/*/target
