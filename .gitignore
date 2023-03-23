@@ -1,6 +1,6 @@
 # project
 .idea
-Chat.iml
-
+*.iml
+/*/*.iml
 # output
-/target
+/*/target
