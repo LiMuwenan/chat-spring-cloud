@@ -1,0 +1,15 @@
+# mysql
+spring:
+  # 建库
+  datasource-root:
+    password: 150621
+    url: jdbc:mysql://localhost:3306/mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    scheme: chat
+  # 建表
+  datasource:
+    password: 150621
+    url: jdbc:mysql://localhost:3306/chat
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
