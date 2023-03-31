@@ -15,6 +15,7 @@
         <module>topic-service</module>
         <module>auth-service</module>
         <module>db</module>
+        <module>common</module>
     </modules>
     <packaging>pom</packaging>
     <name>chat</name>
@@ -65,12 +66,12 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
-<!--        &lt;!&ndash;druid&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
-<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.17</version>
+        </dependency>
 
 <!--&lt;!&ndash;        fastjson&ndash;&gt;-->
 <!--        <dependency>-->
