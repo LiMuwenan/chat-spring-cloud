@@ -18,10 +18,10 @@ public class ClientComMessage {
     private MsgClientDel del;
     private MsgClientNote note;
 
-    private String id;
-    private String original;
+    private String id; // message id
+    private String original; // from xxx topic
     private String rcptTo;
-    private String asUser;
+    private String asUser; // from user
     private int authLvl;
     private int metaWhat;
     private LocalDateTime timestamp;
