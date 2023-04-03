@@ -1,0 +1,10 @@
+server:
+  port: 8701
+
+# eureka
+eureka:
+  client:
+    # 做服务端
+    fetch-registry: false
+    # 不注册自己
+    register-with-eureka: false
