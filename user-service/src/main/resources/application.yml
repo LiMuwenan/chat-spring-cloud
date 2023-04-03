@@ -1,8 +1,10 @@
 server:
   port: 8601
 
-# mysql
 spring:
+  application:
+    name: topic-service
+  # mysql
   datasource:
 #    type: com.alibaba.druid.pool.DruidDataSource
     password: 150621
@@ -19,3 +21,9 @@ mybatis:
   configuration:
     use-generated-keys: true # 自增长主键
     map-underscore-to-camel-case: true # 驼峰下划线自动匹配
+
+# eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8701/eureka
