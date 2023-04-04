@@ -22,7 +22,7 @@ public class LoginController {
     @Resource
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/register/{msgClientAcc}")
+    @RequestMapping(method = RequestMethod.GET, path = "/register/{msgClientAcc}")
     @ResponseBody
     public String registerNewUser(@PathVariable String msgClientAcc) {
 

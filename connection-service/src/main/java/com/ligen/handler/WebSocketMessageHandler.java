@@ -5,10 +5,9 @@ import com.ligen.constant.MsgConstants;
 import com.ligen.entity.message.ClientComMessage;
 import com.ligen.entity.message.client.MsgClientAcc;
 import com.ligen.entity.message.client.MsgClientHi;
+import com.ligen.service.client.AuthServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.*;
@@ -29,6 +28,9 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     //
     @Resource
     private RestTemplate template;
+
+    @Resource
+    private AuthServiceClient authClient;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -151,9 +153,8 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         // http://localhost:8001/register/token
         // http://localhost:8001/register/basic
         // http://localhost:8001/register/reset
-        ResponseEntity<String> stringResponseEntity = template.postForEntity("http://localhost:8001/" + acc.getScheme(), null, String.class);
-        String body = stringResponseEntity.getBody();
-        LOGGER.info(body);
+        String s = authClient.registerNewUser(acc.getScheme());
+        LOGGER.info(s);
 
     }
 
