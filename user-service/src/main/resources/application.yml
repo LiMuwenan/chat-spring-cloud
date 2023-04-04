@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: topic-service
+    name: user-service
   # mysql
   datasource:
 #    type: com.alibaba.druid.pool.DruidDataSource
