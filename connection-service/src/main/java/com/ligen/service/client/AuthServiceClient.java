@@ -1,8 +1,8 @@
 package com.ligen.service.client;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * auth-service服务的接口定义
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient("auth-service")
 public interface AuthServiceClient {
 
-    @RequestMapping("/register/{msgClientAcc}")
-    public String registerNewUser(@PathVariable String msgClientAcc);
+    @RequestMapping(method = RequestMethod.GET, value =  "/receive/{msgClientAcc}/")
+    @LoadBalanced
+    public String receive(@PathVariable String msgClientAcc);
 }

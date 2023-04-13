@@ -1,13 +1,14 @@
 package com.ligen.controller;
 
-import com.ligen.service.UserService;
+import com.alibaba.fastjson.JSONObject;
+import com.ligen.entity.message.client.MsgClientAcc;
+import com.ligen.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -20,12 +21,17 @@ public class LoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Resource
-    private UserService userService;
+    private LoginService loginService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/register/{msgClientAcc}")
+    @RequestMapping(method = RequestMethod.GET, value =  "/receive/{msgClientAcc}/")
     @ResponseBody
-    public String registerNewUser(@PathVariable String msgClientAcc) {
-
-        return "注册成功";
+    public String receive(@PathVariable String msgClientAcc) {
+        MsgClientAcc acc = JSONObject.parseObject(msgClientAcc, MsgClientAcc.class);
+        LOGGER.info(msgClientAcc);
+        // 登录
+        if (acc.isLogin()) {
+            return "forward:/login/" + acc.getScheme();
+        }
+        return loginService.register(acc.getScheme(), acc.getDesc().getPub(), acc.getTags(), acc.getSecret()).toString();
     }
 }

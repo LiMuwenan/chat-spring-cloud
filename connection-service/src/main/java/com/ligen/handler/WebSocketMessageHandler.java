@@ -2,14 +2,13 @@ package com.ligen.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ligen.constant.MsgConstants;
-import com.ligen.entity.message.ClientComMessage;
+import com.ligen.entity.ClientComMessage;
 import com.ligen.entity.message.client.MsgClientAcc;
 import com.ligen.entity.message.client.MsgClientHi;
 import com.ligen.service.client.AuthServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.socket.*;
 
 import javax.annotation.Resource;
@@ -25,10 +24,7 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     // 保存正常连接
     private static final Map<String, WebSocketSession> sessionPool = new HashMap<>();
 
-    //
-    @Resource
-    private RestTemplate template;
-
+    // 调用其他服务,openFeigin
     @Resource
     private AuthServiceClient authClient;
 
@@ -143,18 +139,16 @@ public class WebSocketMessageHandler implements WebSocketHandler {
             LOGGER.error("连接使用的消息版本号不兼容");
             throw new IllegalArgumentException("连接使用的消息版本号不兼容");
         }
-
     }
 
     // 处理{acc}的消息
     private void handleAcc(ClientComMessage clientComMessage) {
         MsgClientAcc acc = clientComMessage.getAcc();
-        // auth
-        // http://localhost:8001/register/token
-        // http://localhost:8001/register/basic
-        // http://localhost:8001/register/reset
-        String s = authClient.registerNewUser(acc.getScheme());
-        LOGGER.info(s);
+        LOGGER.info(acc.toString());
+
+        // 登录
+        String receive = authClient.receive(acc.toString());
+        LOGGER.info("connection-service:" + receive);
 
     }
 

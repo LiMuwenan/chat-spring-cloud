@@ -25,6 +25,14 @@ public interface UserMapper {
     public int insertUsersByList(List<User> userList);
 
     /**
+     * 插入一条用户信息
+     *
+     * @param user
+     * @return 返回影响数据行数
+     */
+    public int insertUser(User user);
+
+    /**
      * 删除一个用户信息，通过uid
      *
      * @param uid
@@ -40,4 +48,19 @@ public interface UserMapper {
      * @return 返回影响数据行数
      */
     public int updateUserInfo(User user);
+
+    /**
+     * 新增一条用户标签
+     * @param uid
+     * @param tag
+     * @return
+     */
+    public int insertUserTags(long uid, String tag);
+
+    /**
+     * 新增一条用户密码
+     * @return
+     */
+    public int insertUserPassword(String uname, long userid, String scheme, int authLvl, String secret);
+    public int insertUserPassword(String uname, long userid);
 }

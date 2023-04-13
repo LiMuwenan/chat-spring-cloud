@@ -3,12 +3,15 @@ package com.ligen.service.Impl;
 import com.ligen.entity.User;
 import com.ligen.mapper.UserMapper;
 import com.ligen.service.UserService;
+import com.ligen.util.UidUtil;
+import com.ligen.util.UserConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +32,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createNewUser(String scheme, Map<String, String> pub, Map<String, String> tags, String secret) {
+        // 用户信息
+        User user = new User();
+        user.setId(UidUtil.gen());
+        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        user.setUpdatedAt(user.getCreatedAt());
+        user.setPub(pub);
+        user.setTags(tags);
+        int count = userMapper.insertUser(user);
+        Map<String, String> userTags = user.getTags();
+        // 用户标签信息
+        for (String key : userTags.keySet()) {
+            userMapper.insertUserTags(user.getId(), key+":"+userTags.get(key));
+        }
+        // 用户密码信息
+        String[] u = secret.split(":");
+        userMapper.insertUserPassword(u[0], user.getId(), scheme,
+                UserConstant.DEFAULT_AUTH_LVL,
+                u[1]);
+
+
+        return user;
+    }
+
+    @Override
     public int deleteUsersByUserId(long uid, boolean hard) {
         return userMapper.deleteUsersByUserId(uid, hard);
     }
@@ -36,5 +64,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserInfo(User user) {
         return userMapper.updateUserInfo(user);
+    }
+
+    @Override
+    public int insertUserTags(long uid, List<String> tags) {
+        for (String tag : tags) {
+            userMapper.insertUserTags(uid, tag);
+        }
+        return tags.size();
     }
 }
