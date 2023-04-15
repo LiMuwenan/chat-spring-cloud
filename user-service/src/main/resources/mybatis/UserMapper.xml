@@ -50,7 +50,7 @@
         )
     </insert>
 
-    <insert id="insertUserPassword" useGeneratedKeys="true">
+    <insert id="insertUserPassword">
         INSERT INTO auth(<include refid="insertAuthFields"/>)
         VALUES(
                #{uname},
