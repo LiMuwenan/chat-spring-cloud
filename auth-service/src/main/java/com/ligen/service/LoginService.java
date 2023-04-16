@@ -21,5 +21,5 @@ public interface LoginService {
      * @param secret
      * @return
      */
-    User login(String scheme, String secret, String cred);
+    boolean login(String scheme, String secret, String cred, String sessionId, String ip);
 }

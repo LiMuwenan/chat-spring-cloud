@@ -14,7 +14,7 @@ public interface AuthServiceClient {
     @LoadBalanced
     public String receiveAcc(@PathVariable String msgClientAcc);
 
-    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/")
-    @ResponseBody
-    public String receiveLogin(@PathVariable String msgClientLogin);
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/{sessionId}/{ip}")
+    @LoadBalanced
+    public String receiveLogin(@PathVariable String msgClientLogin, @PathVariable String sessionId, @PathVariable String ip);
 }

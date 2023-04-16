@@ -32,8 +32,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public User login(String scheme, String secret, String cred) {
-        userServiceClient.login(scheme, secret, cred);
-        return null;
+    public boolean login(String scheme, String secret, String cred, String sessionId, String ip) {
+        return userServiceClient.login(scheme, secret, cred, sessionId, ip);
     }
 }

@@ -57,11 +57,7 @@
             <version>1.2.75</version>
         </dependency>
 
-<!--&lt;!&ndash;        redis&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--        </dependency>-->
+
 <!--&lt;!&ndash;        腾讯chatbot&ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.tencentcloudapi</groupId>-->

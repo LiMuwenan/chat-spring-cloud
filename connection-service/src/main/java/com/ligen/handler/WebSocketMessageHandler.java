@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
 import javax.annotation.Resource;
+import java.net.Inet4Address;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -159,8 +160,8 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         MsgClientLogin login = clientComMessage.getLogin();
 
         // 登录
-        authClient.receiveLogin(login.toString());
-        LOGGER.info(login.toString());
+        String isLogin = authClient.receiveLogin(login.toString(), clientComMessage.getSession().getId(), "127.0.0.1");
+        LOGGER.info(isLogin);
     }
 
     // 处理{sub}的消息

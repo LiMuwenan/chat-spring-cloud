@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.ws.rs.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -29,14 +27,16 @@ public class UserController {
         return user.toString();
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}")
+    @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}/{sessionId}/{ip}")
     @ResponseBody
-    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient) {
+    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
+                  @PathVariable String sessionId, @PathVariable String ip) {
+        boolean isLogin = false;
         if ("basic".equals(scheme)) {
             MsgCredClient cred = JSONObject.parseObject(credClient, MsgCredClient.class);
-            boolean b = userService.loginBasic(secret, scheme, cred);
-            LOGGER.info("登录状态：" + b);
+            isLogin = userService.loginBasic(secret, scheme, cred, sessionId, ip);
+            LOGGER.info("登录状态：" + isLogin);
         }
-        return true;
+        return isLogin;
     }
 }
