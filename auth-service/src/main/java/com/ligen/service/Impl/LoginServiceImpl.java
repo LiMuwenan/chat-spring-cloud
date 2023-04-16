@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -30,5 +29,11 @@ public class LoginServiceImpl implements LoginService {
         LOGGER.info(user.toString());
         LOGGER.info(JSONObject.toJSONString(pub));
         return user;
+    }
+
+    @Override
+    public User login(String scheme, String secret, String cred) {
+        userServiceClient.login(scheme, secret, cred);
+        return null;
     }
 }

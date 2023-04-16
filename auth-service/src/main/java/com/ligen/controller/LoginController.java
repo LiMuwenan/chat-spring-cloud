@@ -2,15 +2,16 @@ package com.ligen.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ligen.entity.message.client.MsgClientAcc;
+import com.ligen.entity.message.client.MsgClientLogin;
+import com.ligen.entity.message.sub.MsgCredClient;
 import com.ligen.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 注册、登录认证、重置密码
@@ -23,15 +24,30 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
-    @RequestMapping(method = RequestMethod.GET, value =  "/receive/{msgClientAcc}/")
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveAcc/{msgClientAcc}/")
     @ResponseBody
-    public String receive(@PathVariable String msgClientAcc) {
+    public String receiveAcc(@PathVariable String msgClientAcc) {
         MsgClientAcc acc = JSONObject.parseObject(msgClientAcc, MsgClientAcc.class);
         LOGGER.info(msgClientAcc);
-        // 登录
-        if (acc.isLogin()) {
-            return "forward:/login/" + acc.getScheme();
+        if ("reset".equals(acc.getScheme())) {
+            // 重置密码
         }
         return loginService.register(acc.getScheme(), acc.getDesc().getPub(), acc.getTags(), acc.getSecret()).toString();
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/")
+    @ResponseBody
+    public String receiveLogin(@PathVariable String msgClientLogin) {
+        MsgClientLogin login = JSONObject.parseObject(msgClientLogin, MsgClientLogin.class);
+        LOGGER.info(msgClientLogin);
+        LOGGER.info(login.getScheme());
+        LOGGER.info(login.getSecret());
+        List<MsgCredClient> cred = login.getCred();
+        MsgCredClient msgCredClient = cred.get(0);
+        loginService.login(login.getScheme(), login.getSecret(), msgCredClient.toString());
+
+
+        return "";
     }
 }

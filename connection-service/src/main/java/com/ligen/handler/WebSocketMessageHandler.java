@@ -5,6 +5,7 @@ import com.ligen.constant.MsgConstants;
 import com.ligen.entity.ClientComMessage;
 import com.ligen.entity.message.client.MsgClientAcc;
 import com.ligen.entity.message.client.MsgClientHi;
+import com.ligen.entity.message.client.MsgClientLogin;
 import com.ligen.service.client.AuthServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,15 +147,20 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         MsgClientAcc acc = clientComMessage.getAcc();
         LOGGER.info(acc.toString());
 
-        // 登录
-        String receive = authClient.receive(acc.toString());
+        // 注册
+        String receive = authClient.receiveAcc(acc.toString());
         LOGGER.info("connection-service:" + receive);
+        // 注册成功由前端再自动提交登录请求
 
     }
 
     // 处理{login}的消息
     private void handleLogin(ClientComMessage clientComMessage) {
+        MsgClientLogin login = clientComMessage.getLogin();
 
+        // 登录
+        authClient.receiveLogin(login.toString());
+        LOGGER.info(login.toString());
     }
 
     // 处理{sub}的消息

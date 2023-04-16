@@ -1,6 +1,8 @@
 package com.ligen.service;
 
+import com.ligen.entity.Auth;
 import com.ligen.entity.User;
+import com.ligen.entity.message.sub.MsgCredClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,4 +58,10 @@ public interface UserService {
      * @return
      */
     public int insertUserTags(long uid, List<String> tags);
+
+    /**
+     * 登录
+     * @return
+     */
+    public boolean loginBasic(String secret, String scheme, MsgCredClient cred);
 }

@@ -14,4 +14,12 @@ public interface LoginService {
      * @return
      */
     User register(String scheme, Map<String, String> pub, Map<String, String> tags, String secret);
+
+    /**
+     * 一个用户登录
+     * @param scheme
+     * @param secret
+     * @return
+     */
+    User login(String scheme, String secret, String cred);
 }

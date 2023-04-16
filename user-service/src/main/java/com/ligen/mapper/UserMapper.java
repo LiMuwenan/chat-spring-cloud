@@ -1,5 +1,6 @@
 package com.ligen.mapper;
 
+import com.ligen.entity.Auth;
 import com.ligen.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -62,5 +63,18 @@ public interface UserMapper {
      * @return
      */
     public int insertUserPassword(String uname, long userid, String scheme, int authLvl, String secret);
-    public int insertUserPassword(String uname, long userid);
+
+    /**
+     * 根据scheme和用户id查询用户认证信息
+     * @param uid
+     * @param scheme
+     * @return
+     */
+    public Auth selectAuthByUserIdAndScheme(long uid, String scheme);
+
+    /**
+     * 根据email查询对应用户id
+     * @return
+     */
+    public long selectUserIdByCred(String cred);
 }

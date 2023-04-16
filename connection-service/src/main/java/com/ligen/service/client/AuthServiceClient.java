@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @FeignClient("auth-service")
 public interface AuthServiceClient {
 
-    @RequestMapping(method = RequestMethod.GET, value =  "/receive/{msgClientAcc}/")
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveAcc/{msgClientAcc}/")
     @LoadBalanced
-    public String receive(@PathVariable String msgClientAcc);
+    public String receiveAcc(@PathVariable String msgClientAcc);
+
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/")
+    @ResponseBody
+    public String receiveLogin(@PathVariable String msgClientLogin);
 }

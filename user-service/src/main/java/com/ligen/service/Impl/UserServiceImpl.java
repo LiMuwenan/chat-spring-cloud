@@ -1,6 +1,8 @@
 package com.ligen.service.Impl;
 
+import com.ligen.entity.Auth;
 import com.ligen.entity.User;
+import com.ligen.entity.message.sub.MsgCredClient;
 import com.ligen.mapper.UserMapper;
 import com.ligen.service.UserService;
 import com.ligen.util.UidUtil;
@@ -77,4 +79,13 @@ public class UserServiceImpl implements UserService {
         }
         return tags.size();
     }
+
+    @Override
+    public boolean loginBasic(String secret, String scheme, MsgCredClient cred) {
+        String[] u = secret.split(":");
+        long uid = userMapper.selectUserIdByCred(cred.getMeth()+":"+cred.getVal());
+        Auth auth = userMapper.selectAuthByUserIdAndScheme(uid, "basic");
+        return u[1].equals(auth.getSecret());
+    }
+
 }

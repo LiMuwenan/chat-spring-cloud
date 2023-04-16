@@ -21,8 +21,16 @@
         userid, tag
     </sql>
 
+    <sql id="selectUserTagsFields">
+        userid
+    </sql>
+
     <sql id="insertAuthFields">
         uname, userid, scheme, authlvl, secret
+    </sql>
+
+    <sql id="selectAuthFields">
+        id, uname, userid, scheme, authlvl, secret
     </sql>
     
     <select id="selectUserByUserId" resultType="User">
@@ -60,5 +68,13 @@
                #{secret}
         )
     </insert>
+
+    <select id="selectAuthByUserIdAndScheme" resultType="Auth">
+        SELECT <include refid="selectAuthFields"/> FROM auth
+    </select>
+
+    <select id="selectUserIdByCred" resultType="long">
+        SELECT <include refid="selectUserTagsFields"/> FROM usertags WHERE tag = #{cred}
+    </select>
 
 </mapper>
