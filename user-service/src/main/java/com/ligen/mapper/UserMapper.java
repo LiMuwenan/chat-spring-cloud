@@ -1,5 +1,6 @@
 package com.ligen.mapper;
 
+import com.ligen.entity.Auth;
 import com.ligen.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,6 +26,14 @@ public interface UserMapper {
     public int insertUsersByList(List<User> userList);
 
     /**
+     * 插入一条用户信息
+     *
+     * @param user
+     * @return 返回影响数据行数
+     */
+    public int insertUser(User user);
+
+    /**
      * 删除一个用户信息，通过uid
      *
      * @param uid
@@ -40,4 +49,32 @@ public interface UserMapper {
      * @return 返回影响数据行数
      */
     public int updateUserInfo(User user);
+
+    /**
+     * 新增一条用户标签
+     * @param uid
+     * @param tag
+     * @return
+     */
+    public int insertUserTags(long uid, String tag);
+
+    /**
+     * 新增一条用户密码
+     * @return
+     */
+    public int insertUserPassword(String uname, long userid, String scheme, int authLvl, String secret);
+
+    /**
+     * 根据scheme和用户id查询用户认证信息
+     * @param uid
+     * @param scheme
+     * @return
+     */
+    public Auth selectAuthByUserIdAndScheme(long uid, String scheme);
+
+    /**
+     * 根据email查询对应用户id
+     * @return
+     */
+    public long selectUserIdByCred(String cred);
 }

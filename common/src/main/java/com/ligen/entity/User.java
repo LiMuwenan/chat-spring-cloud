@@ -1,7 +1,12 @@
 package com.ligen.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
 
@@ -14,26 +19,13 @@ public class User {
     private int auth;
     private Timestamp lastSeen;
     private String userAgent;
-    private Object pub;
-    private Object trusted;
-    private List<String> tags;
+    private Map<String, String> pub;
+    private Map<String, String> trusted;
+    private Map<String, String> tags;
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", state=" + state +
-                ", stateAt=" + stateAt +
-                ", anon=" + anon +
-                ", auth=" + auth +
-                ", lastSeen=" + lastSeen +
-                ", userAgent='" + userAgent + '\'' +
-                ", pub=" + pub +
-                ", trusted=" + trusted +
-                ", tags=" + tags +
-                '}';
+        return JSONObject.toJSONString(this);
     }
 
     public long getId() {
@@ -108,27 +100,27 @@ public class User {
         this.userAgent = userAgent;
     }
 
-    public Object getPub() {
+    public Map<String, String> getPub() {
         return pub;
     }
 
-    public void setPub(Object pub) {
+    public void setPub(Map<String, String> pub) {
         this.pub = pub;
     }
 
-    public Object getTrusted() {
+    public Map<String, String> getTrusted() {
         return trusted;
     }
 
-    public void setTrusted(Object trusted) {
+    public void setTrusted(Map<String, String> trusted) {
         this.trusted = trusted;
     }
 
-    public List<String> getTags() {
+    public Map<String, String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(Map<String, String> tags) {
         this.tags = tags;
     }
 }

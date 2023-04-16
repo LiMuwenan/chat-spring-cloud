@@ -1,8 +1,13 @@
 package com.ligen.service;
 
+import com.ligen.entity.Auth;
 import com.ligen.entity.User;
+import com.ligen.entity.message.sub.MsgCredClient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -23,6 +28,13 @@ public interface UserService {
     public int insertUsersByList(List<User> userList);
 
     /**
+     * 插入一条用户数据
+     *
+     * @return 返回创建的用户信息
+     */
+    public User createNewUser(String scheme, Map<String, String> pub, Map<String, String> tags, String secret);
+
+    /**
      * 删除一个用户信息，通过uid
      *
      * @param uid
@@ -38,4 +50,18 @@ public interface UserService {
      * @return 返回影响数据行数
      */
     public int updateUserInfo(User user);
+
+    /**
+     * 新增一条用户标签
+     * @param uid
+     * @param tags
+     * @return
+     */
+    public int insertUserTags(long uid, List<String> tags);
+
+    /**
+     * 登录
+     * @return
+     */
+    public boolean loginBasic(String secret, String scheme, MsgCredClient cred);
 }
