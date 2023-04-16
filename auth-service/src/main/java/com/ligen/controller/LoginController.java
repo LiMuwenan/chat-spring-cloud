@@ -36,18 +36,22 @@ public class LoginController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/")
+    @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/{sessionId}/{ip}")
     @ResponseBody
-    public String receiveLogin(@PathVariable String msgClientLogin) {
+    public String receiveLogin(@PathVariable String msgClientLogin, @PathVariable String sessionId, @PathVariable String ip) {
         MsgClientLogin login = JSONObject.parseObject(msgClientLogin, MsgClientLogin.class);
         LOGGER.info(msgClientLogin);
         LOGGER.info(login.getScheme());
         LOGGER.info(login.getSecret());
         List<MsgCredClient> cred = login.getCred();
         MsgCredClient msgCredClient = cred.get(0);
-        loginService.login(login.getScheme(), login.getSecret(), msgCredClient.toString());
+        boolean isLogin = loginService.login(login.getScheme(), login.getSecret(), msgCredClient.toString(), sessionId, ip);
 
+        if (isLogin) {
+            return "登录成功";
+        } else {
+            return "登录失败";
+        }
 
-        return "";
     }
 }

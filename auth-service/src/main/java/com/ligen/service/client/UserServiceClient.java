@@ -13,8 +13,9 @@ public interface UserServiceClient {
     @LoadBalanced
     String registerNewUser(@PathVariable String scheme, @PathVariable String pub, @PathVariable String tags, @PathVariable String secret);
 
-    @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}")
+    @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}/{sessionId}/{ip}")
     @LoadBalanced
-    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient);
+    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
+                  @PathVariable String sessionId, @PathVariable String ip);
 
 }

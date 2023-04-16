@@ -1,14 +1,17 @@
 package com.ligen.service.Impl;
 
 import com.ligen.entity.Auth;
+import com.ligen.entity.SessionCache;
 import com.ligen.entity.User;
 import com.ligen.entity.message.sub.MsgCredClient;
 import com.ligen.mapper.UserMapper;
 import com.ligen.service.UserService;
+import com.ligen.util.RedisKeyUtil;
 import com.ligen.util.UidUtil;
 import com.ligen.util.UserConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public User selectUserByUserId(long uid) {
@@ -81,11 +87,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean loginBasic(String secret, String scheme, MsgCredClient cred) {
+    public boolean loginBasic(String secret, String scheme, MsgCredClient cred, String sessionId, String ip) {
         String[] u = secret.split(":");
         long uid = userMapper.selectUserIdByCred(cred.getMeth()+":"+cred.getVal());
         Auth auth = userMapper.selectAuthByUserIdAndScheme(uid, "basic");
-        return u[1].equals(auth.getSecret());
+        boolean isLogin = u[1].equals(auth.getSecret());
+        // 登录成功，加入redis
+        if (isLogin) {
+            // online:{SessionCache}
+            SessionCache cache = new SessionCache();
+            cache.setIp(ip);
+            cache.setUserId(uid);
+            cache.setSessionId(sessionId);
+            redisTemplate.opsForSet().add(RedisKeyUtil.onlineKey(cache.toString()), cache);
+        }
+        return isLogin;
     }
 
 }

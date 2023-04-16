@@ -70,7 +70,7 @@
     </insert>
 
     <select id="selectAuthByUserIdAndScheme" resultType="Auth">
-        SELECT <include refid="selectAuthFields"/> FROM auth
+        SELECT <include refid="selectAuthFields"/> FROM auth WHERE userid = #{uid} AND scheme = #{scheme}
     </select>
 
     <select id="selectUserIdByCred" resultType="long">

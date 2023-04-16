@@ -63,5 +63,5 @@ public interface UserService {
      * 登录
      * @return
      */
-    public boolean loginBasic(String secret, String scheme, MsgCredClient cred);
+    public boolean loginBasic(String secret, String scheme, MsgCredClient cred, String sessionId, String ip);
 }
