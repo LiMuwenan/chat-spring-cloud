@@ -21,3 +21,14 @@ spring:
     database: 0
     url: redis://localhost:6379
     port: 6379
+# mybatis
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml # 映射文件位置
+  type-aliases-package: com.ligen.entity # 别名配置
+  type-handlers-package: com.ligen.handler
+  configuration:
+    use-generated-keys: true # 自增长主键
+    map-underscore-to-camel-case: true # 驼峰下划线自动匹配
+logging:
+  level:
+    com.ligen.mapper: DEBUG

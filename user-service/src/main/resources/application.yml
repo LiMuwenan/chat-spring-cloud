@@ -24,7 +24,6 @@ spring:
 # mybatis
 mybatis:
   mapper-locations: classpath:mybatis/*.xml # 映射文件位置
-  #  config-location: classpath:mybatis/mybatis-config.xml # 核心配置文件位置
   type-aliases-package: com.ligen.entity # 别名配置
   type-handlers-package: com.ligen.handler
   configuration:

@@ -1,5 +1,6 @@
 package com.ligen.service;
 
+import com.ligen.entity.Topic;
 import com.ligen.entity.User;
 
 public interface SearchService {
@@ -8,7 +9,7 @@ public interface SearchService {
 
     User searchUserById(String uid);
 
-    long searchTopicByTag(String tags);
+    Topic searchTopicByTag(String val);
 
-    long searchTopicById(String tid);
+    Topic searchTopicById(String tid);
 }
