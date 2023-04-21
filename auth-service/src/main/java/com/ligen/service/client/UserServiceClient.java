@@ -15,7 +15,7 @@ public interface UserServiceClient {
 
     @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}/{sessionId}/{ip}")
     @LoadBalanced
-    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
+    long login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
                   @PathVariable String sessionId, @PathVariable String ip);
 
 }

@@ -1,11 +1,13 @@
-package com.ligen.service.Impl;
+package com.ligen.service.impl;
 
 import com.ligen.entity.Auth;
 import com.ligen.entity.SessionCache;
 import com.ligen.entity.User;
 import com.ligen.entity.message.sub.MsgCredClient;
+import com.ligen.entity.message.sub.MsgGetOpts;
 import com.ligen.mapper.UserMapper;
 import com.ligen.service.UserService;
+import com.ligen.util.CommonConstant;
 import com.ligen.util.RedisKeyUtil;
 import com.ligen.util.UidUtil;
 import com.ligen.util.UserConstant;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,16 +34,6 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-
-    @Override
-    public User selectUserByUserId(long uid) {
-        return userMapper.selectUserByUserId(uid);
-    }
-
-    @Override
-    public int insertUsersByList(List<User> userList) {
-        return userMapper.insertUsersByList(userList);
-    }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
@@ -69,39 +62,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUsersByUserId(long uid, boolean hard) {
-        return userMapper.deleteUsersByUserId(uid, hard);
-    }
-
-    @Override
-    public int updateUserInfo(User user) {
-        return userMapper.updateUserInfo(user);
-    }
-
-    @Override
-    public int insertUserTags(long uid, List<String> tags) {
-        for (String tag : tags) {
-            userMapper.insertUserTags(uid, tag);
-        }
-        return tags.size();
-    }
-
-    @Override
-    public boolean loginBasic(String secret, String scheme, MsgCredClient cred, String sessionId, String ip) {
+    public long loginBasic(String secret, String scheme, MsgCredClient cred, String sessionId, String ip) {
         String[] u = secret.split(":");
-        long uid = userMapper.selectUserIdByCred(cred.getMeth()+":"+cred.getVal());
-        Auth auth = userMapper.selectAuthByUserIdAndScheme(uid, "basic");
+        User user = userMapper.selectUser(cred.getMeth()+":"+cred.getVal(), CommonConstant.SEARCH_USER_TAG);
+        Auth auth = userMapper.selectAuthByUserIdAndScheme(user.getId(), "basic");
         boolean isLogin = u[1].equals(auth.getSecret());
         // 登录成功，加入redis
         if (isLogin) {
             // online:{SessionCache}
             SessionCache cache = new SessionCache();
             cache.setIp(ip);
-            cache.setUserId(uid);
+            cache.setUserId(user.getId());
             cache.setSessionId(sessionId);
-            redisTemplate.opsForSet().add(RedisKeyUtil.onlineKey(cache.toString()), cache);
+            redisTemplate.opsForValue().set(RedisKeyUtil.onlineKey(user.getId()),sessionId,
+                    CommonConstant.EXPIRED_TIME, TimeUnit.SECONDS);
+            return user.getId();
         }
-        return isLogin;
+        return 0L;
     }
+
+    @Override
+    public User searchUser(String opts, int type) {
+        User user = userMapper.selectUser(opts, type);
+        LOGGER.info(user.toString());
+        return user;
+    }
+
 
 }

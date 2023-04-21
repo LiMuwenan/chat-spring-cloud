@@ -29,14 +29,21 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/login/{scheme}/{secret}/{credClient}/{sessionId}/{ip}")
     @ResponseBody
-    boolean login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
+    long login(@PathVariable String scheme, @PathVariable String secret, @PathVariable String credClient,
                   @PathVariable String sessionId, @PathVariable String ip) {
-        boolean isLogin = false;
+        long uid = 0;
         if ("basic".equals(scheme)) {
             MsgCredClient cred = JSONObject.parseObject(credClient, MsgCredClient.class);
-            isLogin = userService.loginBasic(secret, scheme, cred, sessionId, ip);
-            LOGGER.info("登录状态：" + isLogin);
+            uid = userService.loginBasic(secret, scheme, cred, sessionId, ip);
+            LOGGER.info("登录状态：" + uid);
         }
-        return isLogin;
+        return uid;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/search/{opts}/{type}")
+    @ResponseBody
+    User searchUser(@PathVariable String opts, @PathVariable int type) {
+        LOGGER.info(opts, type);
+        return userService.searchUser(opts, type);
     }
 }

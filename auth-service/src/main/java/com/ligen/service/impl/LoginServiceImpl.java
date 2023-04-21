@@ -1,4 +1,4 @@
-package com.ligen.service.Impl;
+package com.ligen.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ligen.entity.User;
@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean login(String scheme, String secret, String cred, String sessionId, String ip) {
+    public long login(String scheme, String secret, String cred, String sessionId, String ip) {
         return userServiceClient.login(scheme, secret, cred, sessionId, ip);
     }
 }

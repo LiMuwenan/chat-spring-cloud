@@ -2,7 +2,6 @@ package com.ligen.service;
 
 import com.ligen.entity.User;
 
-import java.util.List;
 import java.util.Map;
 
 public interface LoginService {
@@ -19,7 +18,7 @@ public interface LoginService {
      * 一个用户登录
      * @param scheme
      * @param secret
-     * @return
+     * @return 用户id信息
      */
-    boolean login(String scheme, String secret, String cred, String sessionId, String ip);
+    long login(String scheme, String secret, String cred, String sessionId, String ip);
 }

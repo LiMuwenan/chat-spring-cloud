@@ -14,8 +14,12 @@ spring:
     url: jdbc:mysql://localhost:3306/chat?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-# eureka
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8701/eureka
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  # redis
+  redis:
+    port: 6379
+    url: redis://localhost:6379/
+    database: 0

@@ -57,24 +57,6 @@
             <version>1.2.75</version>
         </dependency>
 
-
-<!--&lt;!&ndash;        腾讯chatbot&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.tencentcloudapi</groupId>-->
-<!--            <artifactId>tencentcloud-sdk-java-tbp</artifactId>-->
-<!--            <version>3.1.701</version>-->
-<!--        </dependency>-->
-<!--&lt;!&ndash;        elasticsearch&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
-<!--        </dependency>-->
-<!--&lt;!&ndash;        rabbitmq&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-amqp</artifactId>-->
-<!--        </dependency>-->
-
     </dependencies>
 
 <!--    版本管理-->
@@ -91,6 +73,14 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>2020.0.5</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+<!--            alibaba-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2021.0.4.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -7,12 +7,22 @@ import java.util.Date;
 
 public class MsgGetOpts {
 
-    private String user;
+    /**
+     * 查询条件
+     * 1、标签查用户：meth val
+     * 2、id查用户： user
+     * 3、标签查topic：topic val
+     * 4、id查topic： topic
+     */
+
+    private String user; // base64
     private String topic;
     private LocalDateTime date;
     private int sinceId;
     private int beforeId;
     private int limit;
+    private String meth;
+    private String val;
 
     @Override
     public String toString() {
@@ -65,5 +75,21 @@ public class MsgGetOpts {
 
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    public String getMeth() {
+        return meth;
+    }
+
+    public void setMeth(String meth) {
+        this.meth = meth;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String val) {
+        this.val = val;
     }
 }

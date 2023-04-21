@@ -7,16 +7,21 @@ import com.ligen.entity.message.client.MsgClientAcc;
 import com.ligen.entity.message.client.MsgClientHi;
 import com.ligen.entity.message.client.MsgClientLogin;
 import com.ligen.service.client.AuthServiceClient;
+import com.ligen.service.client.SearchServiceClient;
+import com.ligen.util.CommonConstant;
+import com.ligen.util.RedisKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
 import javax.annotation.Resource;
-import java.net.Inet4Address;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class WebSocketMessageHandler implements WebSocketHandler {
@@ -24,21 +29,30 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketMessageHandler.class);
 
     // 保存正常连接
-    private static final Map<String, WebSocketSession> sessionPool = new HashMap<>();
+    private static final Map<String, WebSocketSession> sessionPool = new HashMap<>(); // key:uid
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     // 调用其他服务,openFeigin
     @Resource
     private AuthServiceClient authClient;
 
+    @Resource
+    private SearchServiceClient searchClient;
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         LOGGER.info("WebSocket连接建立：sessionId={}", session.getId());
-        sessionPool.put(session.getId(), session);
+        redisTemplate.opsForValue().set(RedisKeyUtil.aliveKey(session.getId()), session.getRemoteAddress().toString(),
+                CommonConstant.EXPIRED_TIME, TimeUnit.SECONDS);
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         LOGGER.info("收到WebSocket消息：sessionId={}, message={}", session.getId(), message.getPayload());
+        redisTemplate.opsForValue().set(RedisKeyUtil.aliveKey(session.getId()), session.getRemoteAddress().toString(),
+                CommonConstant.EXPIRED_TIME, TimeUnit.SECONDS);
         String string = message.getPayload().toString(); // 消息字符串
 
         // 反序列化消息包
@@ -112,6 +126,7 @@ public class WebSocketMessageHandler implements WebSocketHandler {
 
     public void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
         // 处理心跳消息
+
     }
 
     @Override
@@ -122,7 +137,8 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         LOGGER.info("WebSocket连接关闭：sessionId={}, status={}", session.getId(), status);
-        sessionPool.remove(session.getId(), session);
+        redisTemplate.delete(RedisKeyUtil.aliveKey(session.getId()));
+
     }
 
     @Override
@@ -130,8 +146,8 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         return false;
     }
 
-    public WebSocketSession getSession(String sessionId) {
-        return sessionPool.get(sessionId);
+    public WebSocketSession getSession(String uid) {
+        return sessionPool.get(uid);
     }
 
     // 处理{hi}的消息
@@ -160,8 +176,13 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         MsgClientLogin login = clientComMessage.getLogin();
 
         // 登录
-        String isLogin = authClient.receiveLogin(login.toString(), clientComMessage.getSession().getId(), "127.0.0.1");
-        LOGGER.info(isLogin);
+        long uid = authClient.receiveLogin(login.toString(), clientComMessage.getSession().getId(), "127.0.0.1");
+
+        // 登录成功将连接信息加入池子
+        if (uid != 0) {
+            sessionPool.put(String.valueOf(uid), clientComMessage.getSession());
+        }
+        LOGGER.info(String.valueOf(uid));
     }
 
     // 处理{sub}的消息
@@ -180,7 +201,14 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     }
 
     // 处理{get}的消息
-    private void handleGet(ClientComMessage clientComMessage) {
+    private void handleGet(ClientComMessage clientComMessage) throws IOException {
+        WebSocketSession session = clientComMessage.getSession();
+        Boolean hasKey = redisTemplate.hasKey(RedisKeyUtil.onlineKey(Long.parseLong(clientComMessage.getAsUser())));
+        if (!hasKey) {
+            session.close();
+        }
+        String s = searchClient.receiveGet(clientComMessage.getGet().toString());
+        LOGGER.info(s);
 
     }
 
