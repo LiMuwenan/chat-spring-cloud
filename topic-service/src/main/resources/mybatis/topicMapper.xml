@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ligen.mapper.TopicMapper">
+
+    <sql id="selectTopicFields">
+        id, createdat, updatedat, state, stateat, touchedat, name, usebt, owner, access, seqid, delid, public, trusted, tags
+    </sql>
+
+    <select id="selectTopic" resultType="Topic">
+        SELECT <include refid="selectTopicFields"/>
+        FROM topics
+        <if test="type==4">
+            WHERE name = #{opts}
+        </if>
+        <if test="type==3">
+            WHERE name = (
+                SELECT topic FROM topictags WHERE tag = #{opts}
+            )
+        </if>
+
+    </select>
+</mapper>

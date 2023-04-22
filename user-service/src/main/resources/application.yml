@@ -11,15 +11,19 @@ spring:
     url: jdbc:mysql://localhost:3306/chat?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull&charset=utf8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
+  cloud:
+    # nacos
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   # redis
   redis:
     port: 6379
     url: redis://localhost:6379/
-    database: 10
+    database: 0
 # mybatis
 mybatis:
   mapper-locations: classpath:mybatis/*.xml # 映射文件位置
-  #  config-location: classpath:mybatis/mybatis-config.xml # 核心配置文件位置
   type-aliases-package: com.ligen.entity # 别名配置
   type-handlers-package: com.ligen.handler
   configuration:
@@ -27,12 +31,6 @@ mybatis:
     map-underscore-to-camel-case: true # 驼峰下划线自动匹配
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
-# eureka
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8701/eureka
 # logging
 logging:
   level:

@@ -12,9 +12,9 @@ public interface AuthServiceClient {
 
     @RequestMapping(method = RequestMethod.GET, value =  "/receiveAcc/{msgClientAcc}/")
     @LoadBalanced
-    public String receiveAcc(@PathVariable String msgClientAcc);
+    String receiveAcc(@PathVariable String msgClientAcc);
 
     @RequestMapping(method = RequestMethod.GET, value =  "/receiveLogin/{msgClientLogin}/{sessionId}/{ip}")
     @LoadBalanced
-    public String receiveLogin(@PathVariable String msgClientLogin, @PathVariable String sessionId, @PathVariable String ip);
+    long receiveLogin(@PathVariable String msgClientLogin, @PathVariable String sessionId, @PathVariable String ip);
 }

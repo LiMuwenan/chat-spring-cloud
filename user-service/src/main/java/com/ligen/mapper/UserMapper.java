@@ -10,12 +10,13 @@ import java.util.List;
 public interface UserMapper {
 
     /**
-     * 通过userId查找一个确定用户
+     * 通过用户id或者tag搜索用户信息
      *
-     * @param uid
-     * @return 返回一个确定的用户信息
+     * @param opts 1为uid，2tag
+     * @param type 1用id查用户表，2用tag查tag表
+     * @return 返回一个确定的用户信息，后期扩展为返回一个列表
      */
-    public User selectUserByUserId(long uid);
+    public User selectUser(String opts, int type);
 
     /**
      * 插入一组用户数据
@@ -72,9 +73,4 @@ public interface UserMapper {
      */
     public Auth selectAuthByUserIdAndScheme(long uid, String scheme);
 
-    /**
-     * 根据email查询对应用户id
-     * @return
-     */
-    public long selectUserIdByCred(String cred);
 }

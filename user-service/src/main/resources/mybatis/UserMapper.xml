@@ -33,10 +33,20 @@
         id, uname, userid, scheme, authlvl, secret
     </sql>
     
-    <select id="selectUserByUserId" resultType="User">
+    <select id="selectUser" resultType="User">
         SELECT <include refid="selectUserFields" />
         FROM users
-        WHERE id=#{id}
+        <if test="type==1">
+            WHERE id=#{opts}
+        </if>
+        <if test="type==2">
+            WHERE id = (
+            SELECT userid
+            FROM usertags
+            WHERE tag=#{opts})
+        </if>
+
+
     </select>
 
     <insert id="insertUser" parameterType="User">

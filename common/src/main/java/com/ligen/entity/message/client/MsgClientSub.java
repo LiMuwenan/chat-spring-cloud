@@ -1,7 +1,7 @@
 package com.ligen.entity.message.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ligen.entity.message.sub.MsgGetQuery;
+import com.ligen.entity.message.sub.MsgGetOpts;
 import com.ligen.entity.message.sub.MsgSetQuery;
 
 public class MsgClientSub {
@@ -9,7 +9,7 @@ public class MsgClientSub {
     private String id;
     private String topic;
     private MsgSetQuery set;
-    private MsgGetQuery get;
+    private MsgGetOpts get;
 
     private boolean created;
     private boolean newSub;
@@ -43,11 +43,11 @@ public class MsgClientSub {
         this.set = set;
     }
 
-    public MsgGetQuery getGet() {
+    public MsgGetOpts getGet() {
         return get;
     }
 
-    public void setGet(MsgGetQuery get) {
+    public void setGet(MsgGetOpts get) {
         this.get = get;
     }
 
