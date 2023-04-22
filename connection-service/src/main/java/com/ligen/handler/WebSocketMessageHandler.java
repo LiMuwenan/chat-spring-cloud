@@ -1,13 +1,8 @@
 package com.ligen.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ligen.constant.MsgConstants;
 import com.ligen.entity.ClientComMessage;
-import com.ligen.entity.message.client.MsgClientAcc;
-import com.ligen.entity.message.client.MsgClientHi;
-import com.ligen.entity.message.client.MsgClientLogin;
-import com.ligen.service.client.AuthServiceClient;
-import com.ligen.service.client.SearchServiceClient;
+import com.ligen.service.MsgHandleStrategy;
 import com.ligen.util.CommonConstant;
 import com.ligen.util.RedisKeyUtil;
 import org.slf4j.Logger;
@@ -17,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,14 +26,10 @@ public class WebSocketMessageHandler implements WebSocketHandler {
     private static final Map<String, WebSocketSession> sessionPool = new HashMap<>(); // key:uid
 
     @Resource
+    private HashMap<String, MsgHandleStrategy> msgStrategy;
+
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
-
-    // 调用其他服务,openFeigin
-    @Resource
-    private AuthServiceClient authClient;
-
-    @Resource
-    private SearchServiceClient searchClient;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -59,52 +49,10 @@ public class WebSocketMessageHandler implements WebSocketHandler {
         ClientComMessage clientComMessage = JSONObject.parseObject(string, ClientComMessage.class);
         clientComMessage.setSession(session);
         clientComMessage.setTimestamp(LocalDateTime.now());
-        // {Hi}
-        if (clientComMessage.getHi() != null) {
-            clientComMessage.setInit(true); // 初始化连接
-            handleHi(clientComMessage);
-        }
-        // {Acc}
-        if (clientComMessage.getAcc() != null) {
-            handleAcc(clientComMessage);
-        }
-        // {Login}
-        if (clientComMessage.getLogin() != null) {
-            handleLogin(clientComMessage);
-        }
-        // {Sub}
-        if (clientComMessage.getSub() != null) {
-            handleSub(clientComMessage);
-        }
-        // {Leave}
-        if (clientComMessage.getLeave() != null) {
-            handleLeave(clientComMessage);
-        }
-        // {Pub}
-        if (clientComMessage.getPub() != null) {
-            handlePub(clientComMessage);
-        }
-        // {Get}
-        if (clientComMessage.getGet() != null) {
-            handleGet(clientComMessage);
-        }
-        // {Set}
-        if (clientComMessage.getSet() != null) {
-            handleSet(clientComMessage);
-        }
-        // {Del}
-        if (clientComMessage.getDel() != null) {
-            handleDel(clientComMessage);
-        }
-        // {Note}
-        if (clientComMessage.getNote() != null) {
-            handleNote(clientComMessage);
-        }
+
+        String responseMsg = msgStrategy.get(clientComMessage.getType()).msgHandle(clientComMessage, sessionPool);
 
         LOGGER.info(clientComMessage.toString());
-
-
-
         // 验证版本xxxx
 
         // 统一处理
@@ -112,7 +60,7 @@ public class WebSocketMessageHandler implements WebSocketHandler {
 
         // 返回消息
 
-        session.sendMessage(new TextMessage("返回消息"));
+        session.sendMessage(new TextMessage(responseMsg));
     }
 
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -148,83 +96,6 @@ public class WebSocketMessageHandler implements WebSocketHandler {
 
     public WebSocketSession getSession(String uid) {
         return sessionPool.get(uid);
-    }
-
-    // 处理{hi}的消息
-    private void handleHi(ClientComMessage clientComMessage) {
-        MsgClientHi hi = clientComMessage.getHi();
-        if (!MsgConstants.MSG_VERSION.equals(hi.getVer())) {
-            LOGGER.error("连接使用的消息版本号不兼容");
-            throw new IllegalArgumentException("连接使用的消息版本号不兼容");
-        }
-    }
-
-    // 处理{acc}的消息
-    private void handleAcc(ClientComMessage clientComMessage) {
-        MsgClientAcc acc = clientComMessage.getAcc();
-        LOGGER.info(acc.toString());
-
-        // 注册
-        String receive = authClient.receiveAcc(acc.toString());
-        LOGGER.info("connection-service:" + receive);
-        // 注册成功由前端再自动提交登录请求
-
-    }
-
-    // 处理{login}的消息
-    private void handleLogin(ClientComMessage clientComMessage) {
-        MsgClientLogin login = clientComMessage.getLogin();
-
-        // 登录
-        long uid = authClient.receiveLogin(login.toString(), clientComMessage.getSession().getId(), "127.0.0.1");
-
-        // 登录成功将连接信息加入池子
-        if (uid != 0) {
-            sessionPool.put(String.valueOf(uid), clientComMessage.getSession());
-        }
-        LOGGER.info(String.valueOf(uid));
-    }
-
-    // 处理{sub}的消息
-    private void handleSub(ClientComMessage clientComMessage) {
-
-    }
-
-    // 处理{leave}的消息
-    private void handleLeave(ClientComMessage clientComMessage) {
-
-    }
-
-    // 处理{pub}的消息
-    private void handlePub(ClientComMessage clientComMessage) {
-
-    }
-
-    // 处理{get}的消息
-    private void handleGet(ClientComMessage clientComMessage) throws IOException {
-        WebSocketSession session = clientComMessage.getSession();
-        Boolean hasKey = redisTemplate.hasKey(RedisKeyUtil.onlineKey(Long.parseLong(clientComMessage.getAsUser())));
-        if (!hasKey) {
-            session.close();
-        }
-        String s = searchClient.receiveGet(clientComMessage.getGet().toString());
-        LOGGER.info(s);
-
-    }
-
-    // 处理{set}的消息
-    private void handleSet(ClientComMessage clientComMessage) {
-
-    }
-
-    // 处理{del}的消息
-    private void handleDel(ClientComMessage clientComMessage) {
-
-    }
-
-    // 处理{note}的消息
-    private void handleNote(ClientComMessage clientComMessage) {
-
     }
 
 }

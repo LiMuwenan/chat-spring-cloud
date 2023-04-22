@@ -11,6 +11,16 @@ public interface CommonConstant {
      */
     int EXPIRED_TIME = 300;
 
+    String MSG_STRATEGY_HI = "hi";
+    String MSG_STRATEGY_ACC = "acc";
+    String MSG_STRATEGY_LOGIN = "login";
+    String MSG_STRATEGY_GET = "get";
+    String MSG_STRATEGY_SUB = "sub";
+    String MSG_STRATEGY_LEAVE = "leave";
+    String MSG_STRATEGY_SET = "set";
+    String MSG_STRATEGY_PUB = "pub";
+    String MSG_STRATEGY_NOTE = "note";
+
     /**
      * 消息包中what字段的信息
      */
