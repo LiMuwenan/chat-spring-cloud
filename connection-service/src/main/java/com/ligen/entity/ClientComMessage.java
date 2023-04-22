@@ -29,6 +29,7 @@ public class ClientComMessage {
 
     private transient WebSocketSession session;
     private boolean init;
+    private String type;
 
     @Override
     public String toString() {
@@ -185,5 +186,13 @@ public class ClientComMessage {
 
     public void setInit(boolean init) {
         this.init = init;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

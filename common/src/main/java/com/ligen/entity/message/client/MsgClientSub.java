@@ -1,15 +1,13 @@
 package com.ligen.entity.message.client;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ligen.entity.message.sub.MsgGetOpts;
-import com.ligen.entity.message.sub.MsgSetQuery;
 
 public class MsgClientSub {
 
     private String id;
     private String topic;
-    private MsgSetQuery set;
-    private MsgGetOpts get;
+    private MsgClientSet set;
+    private MsgClientGet get;
 
     private boolean created;
     private boolean newSub;
@@ -35,19 +33,19 @@ public class MsgClientSub {
         this.topic = topic;
     }
 
-    public MsgSetQuery getSet() {
+    public MsgClientSet getSet() {
         return set;
     }
 
-    public void setSet(MsgSetQuery set) {
+    public void setSet(MsgClientSet set) {
         this.set = set;
     }
 
-    public MsgGetOpts getGet() {
+    public MsgClientGet getGet() {
         return get;
     }
 
-    public void setGet(MsgGetOpts get) {
+    public void setGet(MsgClientGet get) {
         this.get = get;
     }
 
