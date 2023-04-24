@@ -12,10 +12,12 @@ import org.springframework.web.socket.WebSocketSession;
 import javax.annotation.Resource;
 import java.util.Map;
 
+@Service("LoginStrategy")
 public class MsgLoginStrategy implements MsgHandleStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsgLoginStrategy.class);
 
+    @Resource
     private AuthServiceClient authClient;
 
     @Override
