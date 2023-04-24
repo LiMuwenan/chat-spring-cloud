@@ -6,11 +6,13 @@ import com.ligen.entity.message.client.MsgClientHi;
 import com.ligen.service.MsgHandleStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.Map;
 
+@Service("HiStrategy")
 public class MsgHiStrategy implements MsgHandleStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsgHiStrategy.class);

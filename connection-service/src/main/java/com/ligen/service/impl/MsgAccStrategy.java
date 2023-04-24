@@ -6,12 +6,14 @@ import com.ligen.service.MsgHandleStrategy;
 import com.ligen.service.client.AuthServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
 
+@Service("AccStrategy")
 public class MsgAccStrategy implements MsgHandleStrategy {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MsgAccStrategy.class);
