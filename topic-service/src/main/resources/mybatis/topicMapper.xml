@@ -8,6 +8,10 @@
         id, createdat, updatedat, state, stateat, touchedat, name, usebt, owner, access, seqid, delid, public, trusted, tags
     </sql>
 
+    <sql id="insertTopicFields">
+        createdat, updatedat, state, name, owner, public
+    </sql>
+
     <select id="selectTopic" resultType="Topic">
         SELECT <include refid="selectTopicFields"/>
         FROM topics
@@ -21,4 +25,16 @@
         </if>
 
     </select>
+
+    <insert id="insertTopic" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO topics(<include refid="insertTopicFields"/>)
+        VALUES(
+               #{createDat},
+               #{updateDat},
+               #{state},
+               #{name},
+               #{owner},
+               #{pub}
+        )
+    </insert>
 </mapper>

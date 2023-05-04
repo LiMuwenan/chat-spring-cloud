@@ -3,16 +3,13 @@ package com.ligen.entity;
 import com.alibaba.fastjson.JSONObject;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class User {
 
     private long id;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Timestamp createDat;
+    private Timestamp updateDat;
     private int state;
     private Timestamp stateAt;
     private int anon;
@@ -28,6 +25,11 @@ public class User {
         return JSONObject.toJSONString(this);
     }
 
+    public User() {
+        this.createDat = new Timestamp(System.currentTimeMillis());
+        this.updateDat = this.createDat;
+    }
+
     public long getId() {
         return id;
     }
@@ -36,20 +38,20 @@ public class User {
         this.id = id;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public Timestamp getCreateDat() {
+        return createDat;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreateDat(Timestamp createDat) {
+        this.createDat = createDat;
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public Timestamp getUpdateDat() {
+        return updateDat;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdateDat(Timestamp updateDat) {
+        this.updateDat = updateDat;
     }
 
     public int getState() {

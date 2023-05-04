@@ -1,7 +1,6 @@
 package com.ligen.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONField;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -9,8 +8,8 @@ import java.util.Map;
 public class Topic {
 
     private long id;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Timestamp createDat;
+    private Timestamp updateDat;
     private int state;
     private Timestamp stateAt;
     private Timestamp toucheDat;
@@ -19,7 +18,7 @@ public class Topic {
     private long owner;
     private String access;
     private int seqId;
-    private int DelId;
+    private int delId;
     private Map<String, String> pub;
     private Map<String, String> trusted;
     private Map<String, String> tags;
@@ -27,6 +26,11 @@ public class Topic {
     @Override
     public String toString() {
         return JSONObject.toJSONString(this);
+    }
+
+    public Topic() {
+        this.createDat = new Timestamp(System.currentTimeMillis());
+        this.updateDat = this.createDat;
     }
 
     public long getId() {
@@ -37,20 +41,20 @@ public class Topic {
         this.id = id;
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public Timestamp getCreateDat() {
+        return createDat;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setCreateDat(Timestamp createDat) {
+        this.createDat = createDat;
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public Timestamp getUpdateDat() {
+        return updateDat;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdateDat(Timestamp updateDat) {
+        this.updateDat = updateDat;
     }
 
     public int getState() {
@@ -118,11 +122,11 @@ public class Topic {
     }
 
     public int getDelId() {
-        return DelId;
+        return delId;
     }
 
     public void setDelId(int delId) {
-        DelId = delId;
+        this.delId = delId;
     }
 
     public Map<String, String> getPub() {

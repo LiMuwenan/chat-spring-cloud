@@ -4,7 +4,6 @@ import com.ligen.entity.Auth;
 import com.ligen.entity.SessionCache;
 import com.ligen.entity.User;
 import com.ligen.entity.message.sub.MsgCredClient;
-import com.ligen.entity.message.sub.MsgGetOpts;
 import com.ligen.mapper.UserMapper;
 import com.ligen.service.UserService;
 import com.ligen.util.CommonConstant;
@@ -41,8 +40,8 @@ public class UserServiceImpl implements UserService {
         // 用户信息
         User user = new User();
         user.setId(UidUtil.gen());
-        user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        user.setUpdatedAt(user.getCreatedAt());
+        user.setCreateDat(new Timestamp(System.currentTimeMillis()));
+        user.setUpdateDat(user.getCreateDat());
         user.setPub(pub);
         user.setTags(tags);
         int count = userMapper.insertUser(user);
