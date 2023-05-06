@@ -2,7 +2,6 @@ package com.ligen.entity.message.client;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Map;
 public class MsgClientPub {
 
     private String id;
-    private String topic;
+    private long topic;
     private boolean noecho;
     private Map<String, String> head; // 标识消息类型
     private String content; // 消息内容，多媒体或者富文本为json格式
@@ -29,11 +28,11 @@ public class MsgClientPub {
         this.id = id;
     }
 
-    public String getTopic() {
+    public long getTopic() {
         return topic;
     }
 
-    public void setTopic(String topic) {
+    public void setTopic(long topic) {
         this.topic = topic;
     }
 
