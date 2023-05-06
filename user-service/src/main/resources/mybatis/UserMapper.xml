@@ -53,8 +53,8 @@
         INSERT INTO users(<include refid="insertUserFields"/>)
         VALUES(
                #{id},
-               #{createdAt},
-               #{updatedAt},
+               #{createDat},
+               #{updateDat},
                #{pub},
                #{tags}
         )

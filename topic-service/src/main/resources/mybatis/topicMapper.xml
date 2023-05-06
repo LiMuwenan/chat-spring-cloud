@@ -5,11 +5,11 @@
 <mapper namespace="com.ligen.mapper.TopicMapper">
 
     <sql id="selectTopicFields">
-        id, createdat, updatedat, state, stateat, touchedat, name, usebt, owner, access, seqid, delid, public, trusted, tags
+        id, createdat, updatedat, `state`, stateat, touchedat, `name`, usebt, owner, access, seqid, delid, `public`, trusted, tags
     </sql>
 
     <sql id="insertTopicFields">
-        createdat, updatedat, state, name, owner, public
+        id, createdat, updatedat, `state`, `name`, owner, `public`
     </sql>
 
     <select id="selectTopic" resultType="Topic">
@@ -26,9 +26,10 @@
 
     </select>
 
-    <insert id="insertTopic" useGeneratedKeys="true" keyColumn="id">
+    <insert id="insertTopic">
         INSERT INTO topics(<include refid="insertTopicFields"/>)
         VALUES(
+               #{id},
                #{createDat},
                #{updateDat},
                #{state},
