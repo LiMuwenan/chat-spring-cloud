@@ -5,21 +5,21 @@
 <mapper namespace="com.ligen.mapper.TopicMapper">
 
     <sql id="selectTopicFields">
-        id, createdat, updatedat, `state`, stateat, touchedat, `name`, usebt, owner, access, seqid, delid, `public`, trusted, tags
+        id, createdat, updatedat, state, stateat, touchedat, name, usebt, owner, access, seqid, delid, public, trusted, tags
     </sql>
 
     <sql id="insertTopicFields">
-        id, createdat, updatedat, `state`, `name`, owner, `public`
+        id, createdat, updatedat, state, name, owner, public
     </sql>
 
     <select id="selectTopic" resultType="Topic">
         SELECT <include refid="selectTopicFields"/>
         FROM topics
         <if test="type==4">
-            WHERE name = #{opts}
+            WHERE id = #{opts}
         </if>
         <if test="type==3">
-            WHERE name = (
+            WHERE id = (
                 SELECT topic FROM topictags WHERE tag = #{opts}
             )
         </if>

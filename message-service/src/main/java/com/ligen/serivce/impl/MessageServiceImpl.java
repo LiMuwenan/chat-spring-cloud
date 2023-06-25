@@ -25,17 +25,21 @@ public class MessageServiceImpl implements MessageService {
     public int createNewMessage(long topic, long fromUser, String content, String head, int seqId) {
 
         Integer maxSeqId = (Integer) redisTemplate.opsForValue().get(RedisKeyUtil.msgSeqKey(topic));
-        if (maxSeqId != null && seqId <= maxSeqId) {
+        if (maxSeqId == null) {
+            maxSeqId = 0;
+        }
+        if (seqId <= maxSeqId) {
             return 0;
         }
-        redisTemplate.opsForValue().set(RedisKeyUtil.msgSeqKey(topic), seqId);
+        maxSeqId++;
+        redisTemplate.opsForValue().set(RedisKeyUtil.msgSeqKey(topic), maxSeqId);
         Message message = new Message();
         message.setUpdateDat(new Timestamp(System.currentTimeMillis()));
         message.setHead(head);
         HashMap<String ,String> contentMap = new HashMap<>();
         contentMap.put("content", content);
         message.setContent(JSONObject.toJSONString(contentMap));
-        message.setSeqId(seqId);
+        message.setSeqId(maxSeqId);
         message.setFrom(fromUser);
         message.setTopic(topic);
 
